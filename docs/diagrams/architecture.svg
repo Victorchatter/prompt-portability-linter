@@ -1,0 +1,54 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420">
+  <defs>
+    <linearGradient id="panel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="lint" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="900" height="420" fill="#0f172a" rx="12"/>
+  <text x="450" y="45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#f8fafc">How it works</text>
+
+  <g transform="translate(60, 80)">
+    <rect width="180" height="220" rx="16" fill="url(#panel)" stroke="#334155" stroke-width="2"/>
+    <text x="90" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">Inputs</text>
+    <rect x="30" y="70" width="120" height="36" rx="8" fill="#0f172a" stroke="#6366f1" stroke-width="2"/>
+    <text x="90" y="94" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#e2e8f0">--prompt</text>
+    <rect x="30" y="120" width="120" height="36" rx="8" fill="#0f172a" stroke="#ec4899" stroke-width="2"/>
+    <text x="90" y="144" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#e2e8f0">--tools</text>
+    <rect x="30" y="170" width="120" height="36" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+    <text x="90" y="194" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#e2e8f0">--config</text>
+  </g>
+
+  <g transform="translate(320, 130)">
+    <rect width="260" height="140" rx="16" fill="url(#panel)" stroke="#475569" stroke-width="2"/>
+    <text x="130" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">Extraction Engine</text>
+    <text x="130" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8">Prompts → line tokens</text>
+    <text x="130" y="105" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8">JSON/YAML → path tokens</text>
+  </g>
+
+  <g transform="translate(640, 130)">
+    <rect width="220" height="140" rx="16" fill="url(#panel)" stroke="#475569" stroke-width="2"/>
+    <text x="110" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">Rule Engine</text>
+    <text x="110" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8">rules.yaml catalog</text>
+    <text x="110" y="105" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8">regex matching</text>
+  </g>
+
+  <g transform="translate(280, 330)">
+    <rect width="340" height="60" rx="12" fill="url(#lint)" opacity="0.15" stroke="url(#lint)" stroke-width="2"/>
+    <text x="170" y="38" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">Grouped Report by Provider + Suggested Fix</text>
+  </g>
+
+  <line x1="240" y1="120" x2="320" y2="190" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="240" y1="190" x2="320" y2="215" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="240" y1="260" x2="320" y2="240" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="580" y1="200" x2="640" y2="200" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="860" y1="200" x2="820" y2="360" stroke="#64748b" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+</svg>

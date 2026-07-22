@@ -1,0 +1,49 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="800" height="520">
+  <defs>
+    <linearGradient id="barA" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="barB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#059669" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="barC" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="barD" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.85"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="520" fill="#0f172a" rx="12"/>
+  <text x="400" y="45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="700" fill="#f8fafc">Vendor lock-in surface by construct type</text>
+  <text x="400" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8">Common provider-specific tokens found in prompts and tool configs</text>
+
+  <g transform="translate(140, 120)">
+    <text x="-10" y="15" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">prompt cache</text>
+    <rect x="0" y="0" width="540" height="28" rx="6" fill="url(#barA)"/>
+    <text x="550" y="20" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#fbbf24">Anthropic cache_control</text>
+
+    <text x="-10" y="75" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">tool types</text>
+    <rect x="0" y="60" width="360" height="28" rx="6" fill="url(#barB)"/>
+    <text x="370" y="80" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#34d399">computer_use / bash_20250124</text>
+
+    <text x="-10" y="135" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">structured output</text>
+    <rect x="0" y="120" width="480" height="28" rx="6" fill="url(#barC)"/>
+    <text x="490" y="140" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#60a5fa">response_format / strict</text>
+
+    <text x="-10" y="195" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1">schema / slash</text>
+    <rect x="0" y="180" width="300" height="28" rx="6" fill="url(#barD)"/>
+    <text x="310" y="200" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#a78bfa">responseSchema / /compact</text>
+  </g>
+
+  <g transform="translate(120, 370)">
+    <rect x="0" y="0" width="560" height="100" rx="12" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="20" y="35" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#f8fafc">Why this matters</text>
+    <text x="20" y="65" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8">Every provider-specific token is a migration cost. This linter surfaces</text>
+    <text x="20" y="90" font-family="system-ui, sans-serif" font-size="14" fill="#94a3b8">them at edit time so you can decide whether the lock-in is intentional.</text>
+  </g>
+</svg>

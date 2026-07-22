@@ -1,0 +1,55 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 240" width="900" height="240">
+  <defs>
+    <linearGradient id="step" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="900" height="240" fill="#0f172a" rx="12"/>
+  <text x="450" y="40" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">Methodology: detect, classify, suggest</text>
+
+  <g transform="translate(60, 80)">
+    <circle cx="60" cy="60" r="40" fill="url(#step)" stroke="#6366f1" stroke-width="2"/>
+    <text x="60" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#818cf8">1</text>
+    <text x="60" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#f8fafc">Tokenize</text>
+    <text x="60" y="155" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">Line / path</text>
+  </g>
+
+  <line x1="160" y1="140" x2="240" y2="140" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g transform="translate(260, 80)">
+    <circle cx="60" cy="60" r="40" fill="url(#step)" stroke="#ec4899" stroke-width="2"/>
+    <text x="60" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#f472b8">2</text>
+    <text x="60" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#f8fafc">Match</text>
+    <text x="60" y="155" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">Regex rules</text>
+  </g>
+
+  <line x1="360" y1="140" x2="440" y2="140" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g transform="translate(460, 80)">
+    <circle cx="60" cy="60" r="40" fill="url(#step)" stroke="#10b981" stroke-width="2"/>
+    <text x="60" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#34d399">3</text>
+    <text x="60" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#f8fafc">Classify</text>
+    <text x="60" y="155" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">By provider</text>
+  </g>
+
+  <line x1="560" y1="140" x2="640" y2="140" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g transform="translate(660, 80)">
+    <circle cx="60" cy="60" r="40" fill="url(#step)" stroke="#f59e0b" stroke-width="2"/>
+    <text x="60" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#fbbf24">4</text>
+    <text x="60" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#f8fafc">Suggest</text>
+    <text x="60" y="155" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">Portable fix</text>
+  </g>
+
+  <line x1="760" y1="140" x2="840" y2="140" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+
+  <g transform="translate(840, 80)">
+    <rect x="0" y="20" width="80" height="80" rx="12" fill="url(#step)" stroke="#94a3b8" stroke-width="2"/>
+    <text x="40" y="65" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">Report</text>
+  </g>
+</svg>
