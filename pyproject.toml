@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prompt-portability-linter"
+version = "0.1.0"
+description = "A local linter that scans prompts and tool configs for vendor-locked features."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Victor", email = "victor@example.com"}]
+requires-python = ">=3.10"
+keywords = ["prompt", "llm", "portability", "lint", "vendor-lock-in", "local-first"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.scripts]
+prompt-portability-linter = "prompt_portability_linter.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Victorchatter/prompt-portability-linter"
+Repository = "https://github.com/Victorchatter/prompt-portability-linter"
+Issues = "https://github.com/Victorchatter/prompt-portability-linter/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.package-data]
+prompt_portability_linter = ["data/*.yaml"]

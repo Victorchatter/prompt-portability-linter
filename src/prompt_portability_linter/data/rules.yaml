@@ -1,0 +1,49 @@
+rules:
+  - id: anthropic-cache-control
+    pattern: \bcache_control\b
+    locked_to: anthropic
+    message: Anthropic prompt cache breakpoints (cache_control) are not portable.
+    suggestion: Remove cache_control blocks; manage context size in application code.
+    severity: blocker
+
+  - id: anthropic-computer-use
+    pattern: \bcomputer_use\b
+    locked_to: anthropic
+    message: Anthropic computer_use tool type is not portable.
+    suggestion: Use a generic browser or automation tool, or wrap with a provider-specific adapter.
+    severity: blocker
+
+  - id: anthropic-bash-20250124
+    pattern: \bbash_20250124\b
+    locked_to: anthropic
+    message: Anthropic bash_20250124 tool type is not portable.
+    suggestion: Use a generic shell execution tool.
+    severity: blocker
+
+  - id: openai-response-format
+    pattern: \bresponse_format\b
+    locked_to: openai
+    message: OpenAI response_format / structured output is not portable.
+    suggestion: Request plain text or JSON and validate the schema yourself.
+    severity: blocker
+
+  - id: openai-strict-functions
+    pattern: \bstrict\s*:\s*true\b
+    locked_to: openai
+    message: OpenAI function strict mode is not portable.
+    suggestion: Validate tool arguments in application code.
+    severity: blocker
+
+  - id: gemini-response-schema
+    pattern: \bresponseSchema\b
+    locked_to: gemini
+    message: Gemini responseSchema is not portable.
+    suggestion: Request JSON and validate against your schema.
+    severity: blocker
+
+  - id: codex-slash-command
+    pattern: ^/\w+
+    locked_to: codex
+    message: Codex CLI slash commands are not portable.
+    suggestion: Use natural-language instructions or portable tool calls.
+    severity: blocker
