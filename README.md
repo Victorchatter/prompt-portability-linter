@@ -109,6 +109,12 @@ Semantic, model-based detection could catch more subtle forms of lock-in, but it
 ### pipx (recommended)
 
 ```bash
+pipx install git+https://github.com/Victorchatter/prompt-portability-linter.git
+```
+
+Or, from a local clone:
+
+```bash
 pipx install .
 ```
 
