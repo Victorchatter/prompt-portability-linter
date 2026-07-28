@@ -3,47 +3,47 @@ rules:
     pattern: \bcache_control\b
     locked_to: anthropic
     message: Anthropic prompt cache breakpoints (cache_control) are not portable.
-    suggestion: Remove cache_control blocks; manage context size in application code.
+    suggestion: Replace cache_control with explicit context-window management in application code, or strip cache_control blocks when moving to OpenAI.
     severity: blocker
 
   - id: anthropic-computer-use
     pattern: \bcomputer_use\b
     locked_to: anthropic
     message: Anthropic computer_use tool type is not portable.
-    suggestion: Use a generic browser or automation tool, or wrap with a provider-specific adapter.
+    suggestion: Replace computer_use with a generic browser or automation tool, or wrap it in a provider-specific adapter.
     severity: blocker
 
   - id: anthropic-bash-20250124
     pattern: \bbash_20250124\b
     locked_to: anthropic
     message: Anthropic bash_20250124 tool type is not portable.
-    suggestion: Use a generic shell execution tool.
+    suggestion: Replace bash_20250124 with a generic shell execution tool.
     severity: blocker
 
   - id: openai-response-format
     pattern: \bresponse_format\b
     locked_to: openai
     message: OpenAI response_format / structured output is not portable.
-    suggestion: Request plain text or JSON and validate the schema yourself.
+    suggestion: Add a JSON schema constraint in the system prompt or use a provider-native structured-output wrapper; validate JSON yourself instead of relying on response_format.
     severity: blocker
 
   - id: openai-strict-functions
     pattern: \bstrict\s*:\s*true\b
     locked_to: openai
     message: OpenAI function strict mode is not portable.
-    suggestion: Validate tool arguments in application code.
+    suggestion: Remove strict:true and validate tool arguments in application code.
     severity: blocker
 
   - id: gemini-response-schema
     pattern: \bresponseSchema\b
     locked_to: gemini
     message: Gemini responseSchema is not portable.
-    suggestion: Request JSON and validate against your schema.
+    suggestion: Replace responseSchema with a JSON schema constraint in the system prompt and validate the response yourself.
     severity: blocker
 
   - id: codex-slash-command
     pattern: ^/\w+
     locked_to: codex
     message: Codex CLI slash commands are not portable.
-    suggestion: Use natural-language instructions or portable tool calls.
+    suggestion: Replace slash commands with natural-language instructions or portable tool calls.
     severity: blocker

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "prompt-portability-linter"
-version = "0.1.0"
+version = "0.2.0"
 description = "A local linter that scans prompts and tool configs for vendor-locked features."
 readme = "README.md"
 license = {text = "MIT"}

@@ -48,3 +48,38 @@ def format_json(findings: list[dict]) -> str:
         ],
     }
     return json.dumps(payload, indent=2)
+
+
+def format_sarif(findings: list[dict], *, tool_name: str = "prompt-portability-linter") -> str:
+    results = []
+    for finding in findings:
+        line = None
+        ctx = finding.get("context", "")
+        if isinstance(ctx, str) and ctx.lower().startswith("line "):
+            try:
+                line = int(ctx.split(None, 1)[1])
+            except (ValueError, IndexError):
+                pass
+        result = {
+            "ruleId": finding["rule_id"],
+            "level": "error" if finding.get("severity") == "blocker" else "warning",
+            "message": {"text": f"{finding['message']} Suggestion: {finding['suggestion']}"},
+            "locations": [],
+        }
+        physical = {"artifactLocation": {"uri": finding.get("file", "prompt")}}
+        if line:
+            physical["region"] = {"startLine": line}
+        result["locations"].append({"physicalLocation": physical})
+        results.append(result)
+
+    payload = {
+        "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+        "version": "2.1.0",
+        "runs": [
+            {
+                "tool": {"driver": {"name": tool_name, "informationUri": "https://github.com/Victorchatter/prompt-portability-linter"}},
+                "results": results,
+            }
+        ],
+    }
+    return json.dumps(payload, indent=2)

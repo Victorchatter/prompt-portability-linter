@@ -15,6 +15,20 @@ import sys
 import tempfile
 
 
+def _validate_sarif(payload: dict) -> None:
+    """Minimal structural validation of the SARIF payload we produce."""
+    assert payload.get("version") == "2.1.0", payload.get("version")
+    runs = payload.get("runs", [])
+    assert runs, "missing runs"
+    run = runs[0]
+    assert run.get("tool", {}).get("driver", {}).get("name"), "missing tool.driver.name"
+    for result in run.get("results", []):
+        assert result.get("ruleId"), "missing ruleId"
+        assert result.get("message", {}).get("text"), "missing message.text"
+        locs = result.get("locations", [])
+        assert locs and locs[0].get("physicalLocation"), "missing physicalLocation"
+
+
 PROMPT = """\
 You are a helpful assistant.
 
@@ -77,6 +91,21 @@ def main():
             f"unexpected providers: {providers}",
         )
 
+        # SARIF format must be valid and contain both findings.
+        result_sarif = _run(
+            ["--prompt", prompt_path, "--format", "sarif"], project_root, env
+        )
+        _assert(result_sarif.returncode == 1, "expected exit 1 for SARIF format")
+        sarif = json.loads(result_sarif.stdout)
+        _validate_sarif(sarif)
+        results = sarif["runs"][0].get("results", [])
+        _assert(len(results) == 2, f"expected 2 SARIF results, got {len(results)}")
+        rule_ids = {r["ruleId"] for r in results}
+        _assert(
+            "anthropic-cache-control" in rule_ids and "openai-response-format" in rule_ids,
+            f"unexpected SARIF ruleIds: {rule_ids}",
+        )
+
         # Rules subcommand lists the default catalog.
         result_rules = _run(["rules"], project_root, env)
         _assert(result_rules.returncode == 0, "expected rules subcommand exit 0")
@@ -84,6 +113,21 @@ def main():
             "anthropic-cache-control" in result_rules.stdout,
             "expected default rule listed",
         )
+
+        # --score must print a score below 100 because two blockers exist.
+        result_score = _run(["--prompt", prompt_path, "--score"], project_root, env)
+        _assert(result_score.returncode == 1, "expected exit 1 with --score (blockers)")
+        _assert("Portability score:" in result_score.stdout, "expected score header")
+        _assert("/100" in result_score.stdout, "expected score denominator")
+        _assert("anthropic" in result_score.stdout.lower(), "expected anthropic in breakdown")
+        _assert("openai" in result_score.stdout.lower(), "expected openai in breakdown")
+
+        # --suggest-fixes must emit a Markdown report with concrete rewrites.
+        result_fixes = _run(["--prompt", prompt_path, "--suggest-fixes"], project_root, env)
+        _assert(result_fixes.returncode == 1, "expected exit 1 with --suggest-fixes")
+        _assert("# Portability Fix Hints" in result_fixes.stdout, "expected Markdown heading")
+        _assert("cache_control" in result_fixes.stdout, "expected cache_control fix hint")
+        _assert("response_format" in result_fixes.stdout, "expected response_format fix hint")
     finally:
         try:
             os.remove(prompt_path)

@@ -153,6 +153,15 @@ prompt-portability-linter \
 prompt-portability-linter --prompt system.md --format json
 ```
 
+### SARIF output for GitHub Advanced Security
+
+```bash
+prompt-portability-linter --prompt system.md --format sarif > portability.sarif
+```
+
+SARIF output includes `runs[0].results` with `ruleId`, `message.text`, and
+`locations[0].physicalLocation` mapped to the prompt file and line number.
+
 ### List the built-in rules
 
 ```bash
@@ -164,6 +173,33 @@ prompt-portability-linter rules
 ```bash
 prompt-portability-linter --prompt system.md --warn-only
 ```
+
+### Portability score
+
+```bash
+prompt-portability-linter --prompt system.md --score
+```
+
+Prints a `0-100` portability score and a per-provider breakdown. The score
+starts at 100 and subtracts:
+
+| Severity / provider | Deduction |
+|---|---|
+| Anthropic-only blocker | 10 points |
+| OpenAI-only blocker | 10 points |
+| Gemini-only blocker | 8 points |
+| Codex-only blocker | 8 points |
+| Warning | 3 points |
+
+### Suggest portable rewrites
+
+```bash
+prompt-portability-linter --prompt system.md --suggest-fixes
+prompt-portability-linter --prompt system.md --suggest-fixes --output fixes.md
+```
+
+Emits a Markdown patch report. For each finding it shows the matched line and a
+concrete portable rewrite. The original file is **not** modified.
 
 ---
 
@@ -273,8 +309,11 @@ prompt-portability-linter rules --help
 | `--tools PATH` | Tool definitions file (JSON or YAML). Repeatable. |
 | `--config PATH` | Agent config file (JSON or YAML). Repeatable. |
 | `--rules PATH` | Custom `rules.yaml` catalog. |
-| `--format text\|json` | Output format. Default: `text`. |
+| `--format text\|json\|sarif` | Output format. Default: `text`. |
 | `--warn-only` | Report blockers but exit `0`. |
+| `--score` | Print a `0-100` portability score and provider breakdown. |
+| `--suggest-fixes` | Emit a Markdown patch report with portable rewrites. |
+| `--output PATH` | Write `--suggest-fixes` report to a file. |
 
 ### `prompt-portability-linter rules`
 
@@ -299,6 +338,30 @@ You ship the same agent behind Claude, OpenAI, and Gemini depending on the custo
 ### 2. CI guardrail
 
 Add `prompt-portability-linter --prompt prompts/*.md --tools tools.json --format json` to your CI pipeline. The JSON output is easy to fail a PR on, and `--warn-only` lets you phase it in gradually.
+
+#### GitHub Actions with SARIF
+
+Upload SARIF results to GitHub Advanced Security so lock-in appears inline on
+PR diffs and the check fails when blockers are found:
+
+```yaml
+# .github/workflows/portability-sarif.yml
+name: portability-sarif
+on: [pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv tool install .
+      - run: prompt-portability-linter --prompt prompts/*.md --tools tools.json --format sarif > portability.sarif
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: portability.sarif
+```
 
 ### 3. Prompt library review
 
@@ -370,7 +433,8 @@ prompt-portability-linter/
 │   ├── yaml_min.py        # Minimal stdlib-only YAML loader
 │   ├── extract.py         # Token extraction from text / JSON / YAML
 │   ├── linter.py          # Rule matching engine
-│   ├── outputs.py         # Text and JSON formatters
+│   ├── outputs.py         # Text, JSON, and SARIF formatters
+│   ├── score.py           # Portability score + fix-hint report
 │   ├── data/
 │   │   └── rules.yaml     # Default rule catalog
 │   ├── __init__.py
@@ -388,6 +452,7 @@ prompt-portability-linter/
 ## Roadmap
 
 - [x] v0.1.0 — stdlib-only linter, default catalog, text + JSON output.
+- [x] v0.2.0 — SARIF output, portability score, fix hints.
 - [ ] Extended behavioral warnings (e.g. assuming 200k context windows) as a separate "soft warnings" tier.
 - [ ] GitHub Action for CI workflows.
 - [ ] Auto-detect file format from content instead of extension.

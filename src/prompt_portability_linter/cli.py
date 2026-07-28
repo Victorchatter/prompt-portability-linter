@@ -7,7 +7,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import __version__, catalog, extract, linter, outputs
+from . import __version__, catalog, extract, linter, outputs, score
 
 
 def _exit_error(msg: str) -> int:
@@ -45,7 +45,7 @@ def _lint_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--format",
-        choices=["text", "json"],
+        choices=["text", "json", "sarif"],
         default="text",
         help="Output format (default: text).",
     )
@@ -53,6 +53,20 @@ def _lint_parser() -> argparse.ArgumentParser:
         "--warn-only",
         action="store_true",
         help="Report blockers but exit 0.",
+    )
+    parser.add_argument(
+        "--score",
+        action="store_true",
+        help="Print a 0-100 portability score and provider breakdown.",
+    )
+    parser.add_argument(
+        "--suggest-fixes",
+        action="store_true",
+        help="Emit a Markdown patch report with concrete portable rewrites.",
+    )
+    parser.add_argument(
+        "--output",
+        help="Write --suggest-fixes output to a file instead of stdout.",
     )
     return parser
 
@@ -64,7 +78,7 @@ def _rules_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--format",
-        choices=["text", "json"],
+        choices=["text", "json", "sarif"],
         default="text",
         help="Output format (default: text).",
     )
@@ -101,10 +115,30 @@ def _lint_command(args) -> int:
             return _exit_error(f"Cannot read {path}: {exc}")
 
     findings = linter.lint(tokens, rules)
+
+    # Score and fix hints are orthogonal to the primary format, but they
+    # control additional stdout output. The main format still prints first.
     if args.format == "json":
         print(outputs.format_json(findings))
+    elif args.format == "sarif":
+        print(outputs.format_sarif(findings))
     else:
         print(outputs.format_text(findings))
+
+    if args.score:
+        s, breakdown = score.compute_score(findings)
+        print("")
+        print(score.format_score_text(s, breakdown))
+
+    if args.suggest_fixes:
+        report = score.format_suggestions(findings)
+        if args.output:
+            with open(args.output, "w", encoding="utf-8") as f:
+                f.write(report)
+            print(f"Wrote fix hints to {args.output}")
+        else:
+            print("")
+            print(report)
 
     if findings and not args.warn_only:
         return 1
