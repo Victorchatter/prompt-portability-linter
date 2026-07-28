@@ -363,6 +363,70 @@ jobs:
           sarif_file: portability.sarif
 ```
 
+#### GitHub Action
+
+The repo ships a reusable composite action at `action.yml`. It installs the
+linter from the checked-out repo, runs it on the supplied prompt(s), computes
+a portability score, writes a report, and exposes the score and finding count
+as outputs.
+
+```yaml
+# .github/workflows/portability.yml
+name: portability
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Victorchatter/prompt-portability-linter@v0.3.0
+        id: portability
+        with:
+          prompts: prompts/*.md
+          tools: tools.json
+          format: sarif
+          fail-on-blockers: true
+      - run: |
+          echo "score=${{ steps.portability.outputs.score }}"
+          echo "findings=${{ steps.portability.outputs.findings-count }}"
+```
+
+Inputs:
+
+| Input | Required | Default | Description |
+|---|---|---|---|
+| `prompts` | yes | — | Path to prompt file(s). Glob patterns are supported. |
+| `tools` | no | — | Path to tool definitions (JSON/YAML). |
+| `config` | no | — | Path to agent config (JSON/YAML). |
+| `rules` | no | — | Path to a custom `rules.yaml` catalog. |
+| `format` | no | `sarif` | `text`, `json`, or `sarif`. |
+| `warn-only` | no | `false` | Report blockers but do not fail the step. |
+| `fail-on-blockers` | no | `true` | Fail the step when blockers are reported. |
+
+Outputs:
+
+| Output | Description |
+|---|---|
+| `score` | Portability score from 0 to 100. |
+| `findings-count` | Number of blocker findings. |
+| `report-path` | Path to the generated report file. |
+
+#### pre-commit hook
+
+Add the hook to `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/Victorchatter/prompt-portability-linter
+    rev: v0.3.0
+    hooks:
+      - id: prompt-portability-linter
+        args: [--tools, tools.json, --format, sarif, --score]
+```
+
+The default hook runs on Markdown, text, JSON, and YAML files. Pass
+`--warn-only` to report portability issues without blocking the commit.
+
 ### 3. Prompt library review
 
 Teams accumulate dozens of prompts. Running the linter across a directory catches lock-ins that individual authors may not notice.

@@ -13,6 +13,7 @@ import os
 import subprocess
 import sys
 import tempfile
+from pathlib import Path
 
 
 def _validate_sarif(payload: dict) -> None:
@@ -137,9 +138,38 @@ def main():
     print("selfcheck OK")
 
 
+def _check_precommit_hook() -> int:
+    """If pre-commit is installed, verify the local hook definition is usable."""
+    try:
+        if subprocess.run(["pre-commit", "--version"], capture_output=True).returncode != 0:
+            print("SKIP: pre-commit not installed")
+            return 0
+    except FileNotFoundError:
+        print("SKIP: pre-commit not installed")
+        return 0
+
+    project_root = Path(__file__).resolve().parent
+    result = subprocess.run(
+        ["pre-commit", "try-repo", str(project_root), "prompt-portability-linter", "--all-files"],
+        capture_output=True,
+        text=True,
+        cwd=project_root,
+    )
+    # The hook may fail because the example prompt has blockers; we only care
+    # that the hook installed and ran without a configuration error.
+    if "prompt-portability-linter" not in result.stdout and "prompt-portability-linter" not in result.stderr:
+        print("FAIL: pre-commit try-repo did not execute the prompt-portability-linter hook", file=sys.stderr)
+        print(result.stdout)
+        print(result.stderr, file=sys.stderr)
+        return 1
+    print("pre-commit hook usable")
+    return 0
+
+
 if __name__ == "__main__":
     try:
         main()
     except AssertionError as exc:
         print(f"selfcheck FAIL: {exc}", file=sys.stderr)
         sys.exit(1)
+    sys.exit(_check_precommit_hook())

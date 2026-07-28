@@ -1,0 +1,8 @@
+- id: prompt-portability-linter
+  name: prompt-portability-linter
+  description: Lint prompts, tool definitions, and agent configs for vendor-locked features.
+  entry: prompt-portability-linter
+  language: python
+  files: \.(md|txt|json|yaml|yml)$
+  require_serial: false
+  args: [--format, sarif, --score]
